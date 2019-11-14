@@ -1,0 +1,10 @@
+{
+    "env" : {
+        "USER" : "postgres",
+        "HOST" : "localhost",
+        "DB" : "teamwork",
+        "DB_PASSWORD" : "12345678",
+        "DB_PORT" : 5432,
+        "JWT_KEY": "secret"
+    }
+}

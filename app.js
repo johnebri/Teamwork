@@ -3,7 +3,7 @@ const app = express(); // spins up express app
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
-const adminRoutes = require('./api/routes/admins');
+const authRoutes = require('./api/routes/auth');
 // const orderRoutes = require('./api/routes/orders');
 // const userRoutes = require('./api/routes/user');
 
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 });
 
 // Routes which should handle requests
- app.use('/admins/auth', adminRoutes);
+ app.use('/auth', authRoutes);
 // app.use('/orders', orderRoutes);
 // app.use('/user', userRoutes);
 
