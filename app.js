@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
 const authRoutes = require('./api/routes/auth');
-// const orderRoutes = require('./api/routes/orders');
+const gifsRoutes = require('./api/routes/gifs');
 // const userRoutes = require('./api/routes/user');
 
 app.use(morgan('dev')); 
@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 
 // Routes which should handle requests
  app.use('/auth', authRoutes);
-// app.use('/orders', orderRoutes);
+app.use('/gifs', gifsRoutes);
 // app.use('/user', userRoutes);
 
 app.use((req, res, next) => {
