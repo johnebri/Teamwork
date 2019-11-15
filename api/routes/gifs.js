@@ -29,11 +29,8 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-
-
 const GifsController = require('../controllers/gifs');
 
 router.post('/', checkAuth, upload.single('GifImage'),GifsController.create_gif);
-// router.post('/signin', AuthController.signin);
 
 module.exports = router;

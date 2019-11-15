@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 
 const authRoutes = require('./api/routes/auth');
 const gifsRoutes = require('./api/routes/gifs');
+const articlesRoutes = require('./api/routes/articles');
 // const userRoutes = require('./api/routes/user');
 
 app.use(morgan('dev')); 
@@ -26,9 +27,9 @@ app.use((req, res, next) => {
 });
 
 // Routes which should handle requests
- app.use('/auth', authRoutes);
+app.use('/auth', authRoutes);
 app.use('/gifs', gifsRoutes);
-// app.use('/user', userRoutes);
+app.use('/articles', articlesRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
