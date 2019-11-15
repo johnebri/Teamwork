@@ -114,3 +114,98 @@ exports.delete_article = (req, res, next) => {
     });
 };
 
+exports.comment_on_article = (req, res, next) => {
+
+    const articleId = req.params.id;
+    const { comment } = req.body;
+
+    // check if article exists
+    pool.query('SELECT * FROM articles WHERE article_id = $1', [articleId], (error, result) => {
+
+        let article = "";
+
+        if (error) {
+            throw error;
+        }
+
+        if(result.rows.length > 0) {
+
+            article = result.rows[0].article;
+
+            // add article comment
+
+            pool.query('INSERT INTO article_comments (article_id, user_id, comment, comment_date) VALUES($1, $2, $3, now()) RETURNING article_id, user_id, comment, comment_date', [articleId, req.userData.userId, comment], (error, result) => {
+        
+                if (error) {
+                    throw error;
+                }
+        
+                return res.status(200).json({
+                    status: 'success',
+                    data : {
+                        message : "Comment successfully created",                        
+                        createdOn : new Date(),
+                        article : article,
+                        comment : result.rows[0].comment
+                    }
+                })       
+        
+            });        
+
+        } else {
+            // article not found
+            return res.status(404).json({
+                message : 'Article does not exist'
+            });
+        }
+
+    });
+
+};
+
+exports.get_article = (req, res, next) => {
+
+    const articleId = req.params.id;
+    
+    pool.query('SELECT article_id AS id, created_on, title, article FROM articles  WHERE article_id = $1', [articleId], (error, articleResult) => {
+        if(error) {
+            throw error;
+        } 
+
+        if(articleResult.rows.length > 0) {
+            // article found
+            // get article commments 
+            pool.query('SELECT * FROM article_comments WHERE article_id = $1', [articleId], (error, commentResult) => {
+                if(error) {
+                    throw error;
+                }
+                if(commentResult.rows.length > 0) {
+                    // there are comments
+                } else {
+                    // there are no comments
+                    commentResult = [];
+                }
+                
+            });
+
+            return res.status(200).json({
+                status : "success",
+                data : {
+                    id : articleResult.rows[0].id,
+                    createdOn : articleResult.rows[0].created_on,
+                    title : articleResult.rows[0].title,
+                    article : articleResult.rows[0].article
+                }
+            })
+        } else {
+            // no article found with that id
+            return res.status(404).json({
+                satus : "error",
+                message : "No article found"
+            })
+        }
+       
+    });
+
+};
+

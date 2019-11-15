@@ -31,6 +31,8 @@ const upload = multer({
 
 const GifsController = require('../controllers/gifs');
 
-router.post('/', checkAuth, upload.single('GifImage'),GifsController.create_gif);
+router.post('/', checkAuth, upload.single('GifImage'), GifsController.create_gif);
+router.delete('/:id', checkAuth, GifsController.delete_gif);
+router.post('/:id/comment', checkAuth, GifsController.comment_on_gif);
 
 module.exports = router;

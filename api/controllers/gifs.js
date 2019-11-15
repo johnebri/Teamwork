@@ -50,56 +50,88 @@ exports.create_gif = (req, res, next) => {
     })
 };
 
+exports.delete_gif = (req, res, next) => {
 
-exports.signin = (req, res, next) => {
-    const {email, password } = req.body;
+    const gifId = parseInt(req.params.id);
+    // check if gif exists
+    pool.query('SELECT * FROM gifs WHERE gif_id = $1', [gifId], (error, result) => {
 
-    // check email
-    pool.query('SELECT * FROM users WHERE email = $1', [email], (error, result) => {
-        if(error) {
+        if (error) {
             throw error;
         }
 
-        if (result.rows.length > 0 ) {
-            // found a user with email address entered
-            // compare the password
-            bcrypt.compare(password, result.rows[0].password, (err, results) => {
-                if (err) {
-                    return res.status(401).json({
-                        message : "Incorrect Username or Password"
-                    });
+        if(result.rows.length > 0) {
+            // delete gif
+
+            pool.query('DELETE FROM gifs WHERE gif_id = $1 AND user_id = $2', [gifId, req.userData.userId], (error, result) => {
+
+                if (error) {
+                    throw error;
                 }
-                if(results) {
-                    const token = jwt.sign
-                    (
-                        {
-                            email: result.rows[0].email,
-                            userId: result.rows[0].user_id
-                        }, 
-                        process.env.JWT_KEY, 
-                        {
-                            expiresIn: "1h"
-                        }
-                    ); 
-                    return res.status(200).json({
-                        message: 'Success',
-                        data: {
-                            token: token,
-                            userId: result.rows[0].user_id
-                        }
-                    }) 
-                }
-                res.status(404).json({
-                    message: "Incorrect username or password"
-                })
+
+                return res.status(200).json({
+                    status : 'success',
+                    data : {
+                        message : "Gif post successfully deleted"
+                    }
+                });
+
             });
 
-        } else { 
-            // no user found with email address
-            return res.status(400).json({
-                message : "Incorrect username or password"
+        } else {
+            // article not found
+            return res.status(404).json({
+                message : 'Gif post does not exist'
             });
         }
+
+    });
+};
+
+exports.comment_on_gif = (req, res, next) => {
+
+    const gifId = req.params.id;
+    const { comment } = req.body;
+
+    // check if gif exists
+    pool.query('SELECT * FROM gifs WHERE gif_id = $1', [gifId], (error, result) => {
+
+        let gifTitle = "";
+
+        if (error) {
+            throw error;
+        }
+
+        if(result.rows.length > 0) {
+
+            gifTitle = result.rows[0].title;
+
+            // add article comment
+
+            pool.query('INSERT INTO gif_comments (gif_id, user_id, comment, comment_date) VALUES ($1, $2, $3, now()) RETURNING gif_id, user_id, comment, comment_date', [gifId, req.userData.userId, comment], (error, result) => {
+        
+                if (error) {
+                    throw error;
+                }
+        
+                return res.status(200).json({
+                    status: 'success',
+                    data : {
+                        message : "Comment successfully created",                        
+                        createdOn : new Date(),
+                        gifTitle : gifTitle,
+                        comment : result.rows[0].comment
+                    }
+                })    
+            });        
+
+        } else {
+            // article not found
+            return res.status(404).json({
+                message : 'Gif post does not exist'
+            });
+        }
+
     });
 
 };
