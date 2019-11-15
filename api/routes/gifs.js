@@ -33,7 +33,7 @@ const upload = multer({
 
 const GifsController = require('../controllers/gifs');
 
-router.post('/', checkAuth, upload.single('productImage'),GifsController.create_gif);
+router.post('/', checkAuth, upload.single('GifImage'),GifsController.create_gif);
 // router.post('/signin', AuthController.signin);
 
 module.exports = router;
