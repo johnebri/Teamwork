@@ -174,36 +174,33 @@ exports.get_article = (req, res, next) => {
 
         if(articleResult.rows.length > 0) {
             // article found
-            // get article commments 
-            pool.query('SELECT * FROM article_comments WHERE article_id = $1', [articleId], (error, commentResult) => {
+
+             // get article commments 
+             pool.query('SELECT comment_id AS commentId, comment, user_id AS authorId FROM article_comments WHERE article_id = $1 ORDER BY comment_date DESC', [articleId], (error, commentResult) => {
                 if(error) {
                     throw error;
                 }
-                if(commentResult.rows.length > 0) {
-                    // there are comments
-                } else {
-                    // there are no comments
-                    commentResult = [];
-                }
-                
+
+                return res.status(200).json({
+                    status : "success",
+                    data : {
+                        id : articleResult.rows[0].id,
+                        createdOn : articleResult.rows[0].created_on,
+                        title : articleResult.rows[0].title,
+                        article : articleResult.rows[0].article,
+                        comment : commentResult.rows
+                    }
+                })
+
             });
 
-            return res.status(200).json({
-                status : "success",
-                data : {
-                    id : articleResult.rows[0].id,
-                    createdOn : articleResult.rows[0].created_on,
-                    title : articleResult.rows[0].title,
-                    article : articleResult.rows[0].article
-                }
-            })
         } else {
             // no article found with that id
             return res.status(404).json({
                 satus : "error",
                 message : "No article found"
             })
-        }
+        }   
        
     });
 

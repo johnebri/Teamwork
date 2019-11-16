@@ -133,5 +133,47 @@ exports.comment_on_gif = (req, res, next) => {
         }
 
     });
+};
+
+exports.get_gif = (req, res, next) => {
+
+    const gifId = req.params.id;
+    
+    pool.query('SELECT gif_id AS id, created_on, title, image_url FROM gifs  WHERE gif_id = $1', [gifId], (error, gifResult) => {
+        if(error) {
+            throw error;
+        } 
+
+        if(gifResult.rows.length > 0) {
+            // article found
+
+             // get article commments 
+             pool.query('SELECT comment_id AS commentId, user_id AS authorId, comment FROM gif_comments WHERE gif_id = $1 ORDER BY comment_date DESC', [gifId], (error, commentResult) => {
+                if(error) {
+                    throw error;
+                }
+
+                return res.status(200).json({
+                    status : "success",
+                    data : {
+                        id : gifResult.rows[0].id,
+                        createdOn : gifResult.rows[0].created_on,
+                        title : gifResult.rows[0].title,
+                        url : gifResult.rows[0].image_url,
+                        comment : commentResult.rows
+                    }
+                })
+
+            });
+
+        } else {
+            // no article found with that id
+            return res.status(404).json({
+                satus : "error",
+                message : "No gif post found"
+            })
+        }   
+       
+    });
 
 };
