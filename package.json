@@ -4,7 +4,7 @@
   "description": "Teamwork is an internal social network for employees of an organization. The goal of this application is to facilitate more interaction between colleagues and promote team bonding.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "nodemon server.js"
   },
   "repository": {
@@ -34,6 +34,10 @@
     "pg": "^7.12.1"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.6.0",
+    "jasmine-node": "^3.0.0",
+    "mocha": "^6.2.2",
     "nodemon": "^1.19.4"
   }
 }

@@ -4,12 +4,11 @@ const multer = require('multer');
 const checkAuth = require('../middleware/check-auth');
 
 const storage = multer.diskStorage({
-    // destination: function(req, file, cb) {
-    //     cb(null, 'uploads/');
-    // },
+
     filename: function(req, file, cb) {
         cb(null, file.originalname);
     }
+    
 });
 
 const fileFilter = (req, file, cb) => {

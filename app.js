@@ -27,10 +27,10 @@ app.use((req, res, next) => {
 });
 
 // Routes which should handle requests
-app.use('/auth', authRoutes);
-app.use('/gifs', gifsRoutes);
-app.use('/articles', articlesRoutes);
-app.use('/feed', feedRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/gifs', gifsRoutes);
+app.use('/api/v1/articles', articlesRoutes);
+app.use('/api/v1/feed', feedRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
