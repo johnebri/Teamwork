@@ -6,5 +6,4 @@ const FeedController = require('../controllers/feed');
 
 router.get('/', checkAuth, FeedController.get_feed);
 
-
 module.exports = router;
