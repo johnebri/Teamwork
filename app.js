@@ -3,9 +3,10 @@ const app = express(); // spins up express app
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
-const adminRoutes = require('./api/routes/admins');
-// const orderRoutes = require('./api/routes/orders');
-// const userRoutes = require('./api/routes/user');
+const authRoutes = require('./api/routes/auth');
+const gifsRoutes = require('./api/routes/gifs');
+const articlesRoutes = require('./api/routes/articles');
+const feedRoutes = require('./api/routes/feed');
 
 app.use(morgan('dev')); 
 // app.use('/uploads', express.static('uploads'));
@@ -26,9 +27,10 @@ app.use((req, res, next) => {
 });
 
 // Routes which should handle requests
- app.use('/admins/auth', adminRoutes);
-// app.use('/orders', orderRoutes);
-// app.use('/user', userRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/gifs', gifsRoutes);
+app.use('/api/v1/articles', articlesRoutes);
+app.use('/api/v1/feed', feedRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
