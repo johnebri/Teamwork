@@ -1,13 +1,6 @@
 const bcrypt = require('bcryptjs');
 
-const Pool = require('pg').Pool
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'teamwork',
-    password: '12345678',
-    port: 5432,
-})
+const { pool } = require('../config');
 
 exports.admin_create_user = (req, res, next) => {
 

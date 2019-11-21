@@ -1,15 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-
-const Pool = require('pg').Pool
-const pool = new Pool({
-    user: process.env.USER,
-    host: process.env.HOST,
-    database: process.env.DB,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-})
+const { pool } = require('../config');
 
 exports.create_article = (req, res, next) => {
     
