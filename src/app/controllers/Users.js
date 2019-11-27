@@ -32,7 +32,14 @@ module.exports = {
 
     try {
       const { rows } = await db.query(text, values);
-      return res.status(201).send(rows[0]);
+      return res.status(201).json({
+          status : "success",
+          data : {
+            message : "User account successfully created", 
+            token : "token here", 
+            userId : "id here"
+          }
+      });
     } catch(error) {
       return res.status(400).send(error);
     }
