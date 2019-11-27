@@ -28,3 +28,4 @@ app.put('/api/v1/reflections/:id', Reflection.update);
 app.delete('/api/v1/reflections/:id', Reflection.delete);
 
 app.post('/api/v1/auth/create-user', Users.create);
+app.post('/api/v1/auth/signin', Users.signin);

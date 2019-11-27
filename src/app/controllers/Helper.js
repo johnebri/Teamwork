@@ -31,6 +31,7 @@ const Helper = {
     async hashPassword(password, salt) {
       return await bcrypt.hash(password, salt);
     },
+  
 
   
 
