@@ -3,6 +3,8 @@ const uuidv4 = require('uuid/v4');
 const db = require('../db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Helper = require('./Helper');
+
 
 module.exports = {
   /**
@@ -12,23 +14,29 @@ module.exports = {
    * @returns {object} reflection object 
    */
 
+ 
    
   async create(req, res) {
   
-    const { firstName, lastName, email, password, gender, jobRole, department, address } = req.body;
+    const { firstName, lastName, email, password, gender, jobRole, department, address } = req.body;          
 
-    // create token
-    const token = jwt.sign
-    (
-        {
-            email: email,
-            userId: 1
-        },
-        process.env.JWT_KEY,
-        {
-            expiresIn: "5h"
-        }
-    );
+    // check if user already exist
+    const checktext = 'SELECT * FROM  users WHERE email = $1';
+    try {
+        const { rows, rowCount } = await db.query(checktext, [email]);
+        if (rowCount > 0) {
+            // user found
+            return res.status(401).json({
+                message : "An account already exist with the email address you provided"
+            })
+        } 
+    } catch (error) {
+        return res.status(404).send(error);
+    } 
+
+    // hash password
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await Helper.hashPassword(password, salt);   
 
     const text = `INSERT INTO
       users(first_name, last_name, email, password, gender, job_role, department, address)
@@ -38,7 +46,7 @@ module.exports = {
       firstName,
       lastName,
       email,
-      token,
+      hashedPassword,
       gender,
       jobRole, 
       department, 
@@ -47,12 +55,26 @@ module.exports = {
 
     try {
       const { rows } = await db.query(text, values);
+
+      // create token
+    const token = jwt.sign
+    (
+        {
+            email: email,
+            userId: rows[0].user_id
+        },
+        "secret",
+        {
+            expiresIn: "5h"
+        }
+    );
+
       return res.status(201).json({
           status : "success",
           data : {
             message : "User account successfully created", 
             token : token, 
-            userId : "id here"
+            userId : rows[0].user_id
           }
       });
     } catch(error) {
