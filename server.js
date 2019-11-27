@@ -1,9 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const babelpolyfill = require('babel-polyfill');
+const checkAuth = require('./middleware/check-auth');
 
 const ReflectionWithDB = require('./src/app/controllers/Reflection');
 const Users = require('./src/app/controllers/Users');
+const Articles = require('./src/app/controllers/Articles');
 
 dotenv.config();
 const Reflection = ReflectionWithDB;
@@ -29,3 +31,6 @@ app.delete('/api/v1/reflections/:id', Reflection.delete);
 
 app.post('/api/v1/auth/create-user', Users.create);
 app.post('/api/v1/auth/signin', Users.signin);
+
+app.post('/api/v1/articles', checkAuth, Articles.create_article);
+app.patch('/api/v1/articles/:id', checkAuth, Articles.edit_article);
