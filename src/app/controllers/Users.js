@@ -1,6 +1,8 @@
 const moment = require('moment');
 const uuidv4 = require('uuid/v4');
 const db = require('../db');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   /**
@@ -12,8 +14,21 @@ module.exports = {
 
    
   async create(req, res) {
-
+  
     const { firstName, lastName, email, password, gender, jobRole, department, address } = req.body;
+
+    // create token
+    const token = jwt.sign
+    (
+        {
+            email: email,
+            userId: 1
+        },
+        process.env.JWT_KEY,
+        {
+            expiresIn: "5h"
+        }
+    );
 
     const text = `INSERT INTO
       users(first_name, last_name, email, password, gender, job_role, department, address)
@@ -23,7 +38,7 @@ module.exports = {
       firstName,
       lastName,
       email,
-      password,
+      token,
       gender,
       jobRole, 
       department, 
@@ -36,7 +51,7 @@ module.exports = {
           status : "success",
           data : {
             message : "User account successfully created", 
-            token : "token here", 
+            token : token, 
             userId : "id here"
           }
       });
