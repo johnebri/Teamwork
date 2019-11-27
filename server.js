@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const babelpolyfill = require('babel-polyfill');
 
 const ReflectionWithDB = require('./src/app/controllers/Reflection');
+const Users = require('./src/app/controllers/Users');
 
 dotenv.config();
 const Reflection = ReflectionWithDB;
@@ -25,3 +26,5 @@ app.get('/api/v1/reflections', Reflection.getAll);
 app.get('/api/v1/reflections/:id', Reflection.getOne);
 app.put('/api/v1/reflections/:id', Reflection.update);
 app.delete('/api/v1/reflections/:id', Reflection.delete);
+
+app.post('/api/v1/auth/create-user', Users.create);
