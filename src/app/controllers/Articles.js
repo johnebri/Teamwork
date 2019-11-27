@@ -117,7 +117,56 @@ module.exports = {
     } catch (error) {
         return res.status(404).send(error);
     } 
-  }
+  },
+  /**
+   * Delete A Reflection
+   * @param {object} req 
+   * @param {object} res 
+   * @returns {void} return statuc code 204 
+   */
+  async delete_article(req, res) {
+
+    const articleId = parseInt(req.params.id);
+
+    // check if article exists
+    const findOneQuery = 'SELECT * FROM  articles WHERE article_id = $1';
+    try {
+        const { rowCount } = await db.query(findOneQuery, [articleId]);
+        if (rowCount > 0) {
+            // article exists
+            
+            const deleteQuery = 'DELETE FROM articles WHERE article_id=$1 returning *';
+            try {
+                const { rows, rowCount } = await db.query(deleteQuery, [articleId]);
+                if(rowCount > 0) {
+                    // article deleted
+                    return res.status(404).json({
+                        status : "success",
+                        data : { 
+                            message : 'Article successfully deleted'
+                        }
+                    })
+                } else {
+                    // delete failed
+                    return res.status(404).json({
+                        message : 'You do not have the permission to deleted selected article'
+                    })
+                }
+            } catch(error) {
+                return res.status(400).send(error);
+            }
+
+        } else {
+            // article does not exist
+            return res.status(404).json({
+                message : 'Article does not exist'
+            })
+        }
+    } catch (error) {
+        return res.status(404).send(error);
+    }
+    
+  } 
 }
 
 // export default Reflection;

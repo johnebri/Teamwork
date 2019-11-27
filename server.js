@@ -34,3 +34,4 @@ app.post('/api/v1/auth/signin', Users.signin);
 
 app.post('/api/v1/articles', checkAuth, Articles.create_article);
 app.patch('/api/v1/articles/:id', checkAuth, Articles.edit_article);
+app.delete('/api/v1/articles/:id', checkAuth, Articles.delete_article);
