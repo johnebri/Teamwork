@@ -166,6 +166,70 @@ module.exports = {
         return res.status(404).send(error);
     }
     
+  }, 
+   /**
+   * Comment on an Article
+   * @param {object} req 
+   * @param {object} res 
+   * @returns {void} return statuc code 204 
+   */
+  async comment_on_article(req, res) {
+
+    const articleId = parseInt(req.params.id);
+    const { comment } = req.body;
+    let article = "";
+
+    // check if article exists
+    const findOneQuery = 'SELECT * FROM  articles WHERE article_id = $1';
+
+    try {
+        const { rows, rowCount } = await db.query(findOneQuery, [articleId]);
+        if (rowCount > 0) {
+            // article exists
+            article = rows[0].article;
+
+            const commentQuery = `INSERT INTO article_comments(article_id, user_id, comment, comment_date) VALUES($1, $2, $3, $4) returning *`;
+            const values = [
+                articleId,
+                req.userData.userId,
+                comment,
+                moment(new Date())
+            ];
+
+            try {
+                const { rows, rowCount } = await db.query(commentQuery, values);
+                
+                if(rowCount > 0) {
+                    // comment added
+                    return res.status(200).json({
+                        status : "success",
+                        data : { 
+                            message : 'Comment successfully created',
+                            createdOn : rows[0].comment_date,
+                            article: article,
+                            comment : comment
+                        }
+                    })
+                } else {
+                    // comment failed
+                    return res.status(404).json({
+                        message : 'You do not have the permission to deleted selected article'
+                    })
+                }
+            } catch(error) {
+                return res.status(400).send(error);
+            }
+
+        } else {
+            // article does not exist
+            return res.status(404).json({
+                message : 'Article does not exist'
+            })
+        }
+    } catch (error) {
+        return res.status(404).send(error);
+    }
+    
   } 
 }
 
