@@ -36,3 +36,4 @@ app.post('/api/v1/articles', checkAuth, Articles.create_article);
 app.patch('/api/v1/articles/:id', checkAuth, Articles.edit_article);
 app.delete('/api/v1/articles/:id', checkAuth, Articles.delete_article);
 app.post('/api/v1/articles/:id/comment', checkAuth, Articles.comment_on_article);
+app.get('/api/v1/articles/:id', checkAuth, Articles.get_article);
