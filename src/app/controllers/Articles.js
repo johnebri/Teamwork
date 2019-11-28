@@ -262,18 +262,18 @@ module.exports = {
             const articleCommentsQuery = 'SELECT comment_id AS commentId, comment, user_id AS authorId FROM article_comments WHERE article_id = $1 ORDER BY comment_date DESC';
             try {
                 const { rows, rowCount } = await db.query(articleCommentsQuery, [articleId]);
-                if(rowCount > 0) {
-                    return res.status(200).json({
-                        status : "success",
-                        data : {
-                            id : articleId,
-                            createdOn : createdOn,
-                            title : title,
-                            article : article,
-                            comment : rows
-                        }
-                    })
-                }
+                
+                return res.status(200).json({
+                    status : "success",
+                    data : {
+                        id : articleId,
+                        createdOn : createdOn,
+                        title : title,
+                        article : article,
+                        comment : rows
+                    }
+                })
+             
             } catch(error) {
                 return res.status(404).send(error);
             }          

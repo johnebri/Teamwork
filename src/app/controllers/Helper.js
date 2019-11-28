@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const cloudinary = require('cloudinary').v2;
 
 const environment = process.env.NODE_ENV;
 
@@ -32,7 +33,15 @@ const Helper = {
       return await bcrypt.hash(password, salt);
     },
   
-
+    uploadImage(path) {
+      return new Promise((resolve, reject) => {
+        cloudinary.uploader.upload(path, { tags: 'TeamworkDemo' }, (err, res) => {
+          if (err) return reject(err);
+          return resolve(res.url);
+        });
+      });
+    },
+    
   
 
   /**
@@ -57,7 +66,7 @@ const Helper = {
 
   uploadToCloudinary(image) {
     return new Promise((resolve, reject) => {
-      cloudinary.uploader.upload(image.tempFilePath, { folder: 'TeamworkDemo' }, (err, url) => {
+      cloudinary.uploader.upload(image, { tags: 'TeamworkDemo' }, (err, url) => {
         if (err) return reject(err);
         return resolve(url);
       });
