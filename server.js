@@ -5,21 +5,25 @@ const checkAuth = require('./middleware/check-auth');
 
 const multer = require('multer');
 
-const ReflectionWithDB = require('./src/app/controllers/Reflection');
 const Users = require('./src/app/controllers/Users');
 const Articles = require('./src/app/controllers/Articles');
 const Gifs = require('./src/app/controllers/Gifs');
 const Feed = require('./src/app/controllers/Feed');
 
 dotenv.config();
-const Reflection = ReflectionWithDB;
 
 const app = express();
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    return res.status(200).send({'message': 'YAY! Congratulations! Your first endpoint is working'});
+    res.redirect('https://documenter.getpostman.com/view/9082520/SW7gTQ9n')
+  
 })
+
+
+
+
+
 
 const port = process.env.PORT || 3000;
 
@@ -51,12 +55,6 @@ const upload = multer({
     },
     fileFilter: fileFilter
 });
-
-app.post('/api/v1/reflections', Reflection.create);
-app.get('/api/v1/reflections', Reflection.getAll);
-app.get('/api/v1/reflections/:id', Reflection.getOne);
-app.put('/api/v1/reflections/:id', Reflection.update);
-app.delete('/api/v1/reflections/:id', Reflection.delete);
 
 app.post('/api/v1/auth/create-user', Users.create);
 app.post('/api/v1/auth/signin', Users.signin);
