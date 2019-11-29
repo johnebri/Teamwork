@@ -56,7 +56,7 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-app.post('/api/v1/auth/create-user', Users.create);
+app.post('/api/v1/auth/create-user', checkAuth, Users.create);
 app.post('/api/v1/auth/signin', Users.signin);
 
 app.post('/api/v1/articles', checkAuth, Articles.create_article);

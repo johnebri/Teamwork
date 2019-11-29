@@ -18,7 +18,14 @@ module.exports = {
    
   async create(req, res) {
   
-    const { firstName, lastName, email, password, gender, jobRole, department, address } = req.body;          
+    const { firstName, lastName, email, password, gender, jobRole, department, address } = req.body; 
+    
+    // check if request was sent by an admin
+    const role = req.userData.role;
+
+    if(role !== 'admin') {
+        return res.status(200).json({ message : 'You do not have the priviledge to create a user' })
+    }
 
     // check if user already exist
     const checktext = 'SELECT * FROM  users WHERE email = $1';
@@ -39,8 +46,8 @@ module.exports = {
     const hashedPassword = await Helper.hashPassword(password, salt);   
 
     const text = `INSERT INTO
-      users(first_name, last_name, email, password, gender, job_role, department, address)
-      VALUES($1, $2, $3, $4, $5, $6, $7, $8)
+      users(first_name, last_name, email, password, gender, job_role, department, address, role)
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
       returning *`;
     const values = [
       firstName,
@@ -50,7 +57,8 @@ module.exports = {
       gender,
       jobRole, 
       department, 
-      address
+      address,
+      "user"
     ];
 
     try {
@@ -61,7 +69,8 @@ module.exports = {
         (
             {
                 email: email,
-                userId: rows[0].user_id
+                userId: rows[0].user_id,
+                role : rows[0].role
             },
             "secret",
             {
@@ -107,7 +116,8 @@ module.exports = {
                 (
                     {
                         email: email,
-                        userId: rows[0].user_id
+                        userId: rows[0].user_id,
+                        role: rows[0].role
                     },
                     "secret",
                     {
