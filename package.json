@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "build": "babel server.js --out-dir build",
     "dev-start": "babel-watch server.js",
     "start": "nodemon server.js"
@@ -28,7 +28,10 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-watch": "^7.0.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "make-runnable": "^1.3.6",
+    "mocha": "^6.2.2",
     "nodemon": "^2.0.1"
   }
 }

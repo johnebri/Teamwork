@@ -16,14 +16,8 @@ const app = express();
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.redirect('https://documenter.getpostman.com/view/9082520/SW7gTQ9n')
-  
+    res.redirect('https://documenter.getpostman.com/view/9082520/SW7gTQ9n');
 })
-
-
-
-
-
 
 const port = process.env.PORT || 3000;
 
@@ -71,3 +65,5 @@ app.post('/api/v1/gifs/:id/comment', checkAuth, Gifs.comment_on_gif);
 app.get('/api/v1/gifs/:id', checkAuth, Gifs.get_gif);
 
 app.get('/api/v1/feed', checkAuth, Feed.get_feed);
+
+module.exports = app;
