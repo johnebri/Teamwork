@@ -15,6 +15,16 @@ dotenv.config();
 const app = express();
 app.use(express.json())
 
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept,Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    next();
+});
+
+
+
 app.get('/', (req, res) => {
     res.redirect('https://documenter.getpostman.com/view/9082520/SW7gTQ9n');
 })
