@@ -27,14 +27,15 @@ module.exports = {
    
     const image = await Helper.uploadToCloudinary(req.file.path); 
 
-    const createGifQuery = `INSERT INTO gifs(user_id, title, image_url, created_on)
-      VALUES($1, $2, $3, $4)
+    const createGifQuery = `INSERT INTO gifs(user_id, title, image_url, created_on, type)
+      VALUES($1, $2, $3, $4, $5)
       returning *`;
     const values = [
       req.userData.userId,
       title,
       image.url,
-      moment(new Date())
+      moment(new Date()),
+      'gif'
     ];
 
     try {

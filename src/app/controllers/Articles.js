@@ -18,14 +18,15 @@ module.exports = {
   
     const { title, article } = req.body;  
 
-    const text = `INSERT INTO articles(user_id, title, article, created_on)
-      VALUES($1, $2, $3, $4)
+    const text = `INSERT INTO articles(user_id, title, article, created_on, type)
+      VALUES($1, $2, $3, $4, $5)
       returning *`;
     const values = [
       req.userData.userId,
       title,
       article,
-      moment(new Date())
+      moment(new Date()),
+      "article"
     ];
 
     try {
