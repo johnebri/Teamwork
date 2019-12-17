@@ -300,13 +300,15 @@ module.exports = {
         if (rowCount > 0) {
             // got feed                      
             return res.status(200).json({
-                result : rows
+                result : rows,
+                status: 200
             })
 
         } else {
             // feed not found
             return res.status(404).json({
-                result : 'No Article found'
+                result : 'No Article found',
+                status: 400
             })
         }
     } catch (error) {
