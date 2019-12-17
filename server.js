@@ -74,6 +74,7 @@ app.post('/api/v1/gifs', checkAuth, upload.single('GifImage'), Gifs.create_gif);
 app.delete('/api/v1/gifs/:id', checkAuth, Gifs.delete_gif);
 app.post('/api/v1/gifs/:id/comment', checkAuth, Gifs.comment_on_gif);
 app.get('/api/v1/gifs/:id', checkAuth, Gifs.get_gif);
+app.get('/api/v1/gifs', checkAuth, Gifs.get_all_gifs);
 
 app.get('/api/v1/feed', checkAuth, Feed.get_feed);
 

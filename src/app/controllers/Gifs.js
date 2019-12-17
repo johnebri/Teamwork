@@ -230,6 +230,28 @@ module.exports = {
     } catch (error) {
         return res.status(404).send(error);
     } 
+  }, 
+
+  async get_all_gifs(req, res) {
+
+    const allGifsQuery = 'SELECT * from gifs';
+    try {
+        const { rows, rowCount } = await db.query(allGifsQuery);
+        if (rowCount > 0) {
+            // got feed                      
+            return res.status(200).json({
+                result : rows
+            })
+
+        } else {
+            // feed not found
+            return res.status(404).json({
+                message : 'No Gif found'
+            })
+        }
+    } catch (error) {
+        return res.status(404).send(error);
+    } 
   }
 
 }
