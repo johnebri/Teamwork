@@ -10,7 +10,7 @@ module.exports = {
   async get_feed(req, res) {
 
     // check if user article exists
-    const feedQuery = 'SELECT article_id AS id, created_on AS createdOn, title AS title, article AS articleurl, user_id AS authorId FROM articles UNION SELECT gif_id AS id, created_on AS createdOn, title AS title, image_url as articleurl, user_id as authorId FROM gifs ORDER BY createdOn DESC';
+    const feedQuery = 'created_on AS createdOn, title AS title, article AS articleurl, user_id AS authorId FROM articles UNION SELECT created_on AS createdOn, title AS title, image_url as articleurl, user_id as authorId FROM gifs ORDER BY createdOn DESC';
     try {
         const { rows, rowCount } = await db.query(feedQuery);
         if (rowCount > 0) {
