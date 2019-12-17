@@ -291,10 +291,12 @@ module.exports = {
   },
 
   async get_all_articles(req, res) {
+    // get user id
+    const userId = req.userData.userId;
 
-    const allArticlesQuery = 'SELECT * from articles';
+    const allArticlesQuery = 'SELECT * from articles WHERE user_id = $1';
     try {
-        const { rows, rowCount } = await db.query(allArticlesQuery);
+        const { rows, rowCount } = await db.query(allArticlesQuery, [userId]);
         if (rowCount > 0) {
             // got feed                      
             return res.status(200).json({
@@ -304,7 +306,7 @@ module.exports = {
         } else {
             // feed not found
             return res.status(404).json({
-                message : 'No Article found'
+                result : 'No Article found'
             })
         }
     } catch (error) {
