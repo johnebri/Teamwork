@@ -288,6 +288,28 @@ module.exports = {
     } catch (error) {
         return res.status(404).send(error);
     } 
+  },
+
+  async get_all_articles(req, res) {
+
+    const allArticlesQuery = 'SELECT * from articles';
+    try {
+        const { rows, rowCount } = await db.query(allArticlesQuery);
+        if (rowCount > 0) {
+            // got feed                      
+            return res.status(200).json({
+                result : rows
+            })
+
+        } else {
+            // feed not found
+            return res.status(404).json({
+                message : 'No Article found'
+            })
+        }
+    } catch (error) {
+        return res.status(404).send(error);
+    } 
   }
 
 }
