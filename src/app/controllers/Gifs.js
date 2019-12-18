@@ -233,20 +233,24 @@ module.exports = {
   }, 
 
   async get_all_gifs(req, res) {
+    // get user id
+    const userId = req.userData.userId;
 
-    const allGifsQuery = 'SELECT * from gifs';
+    const allGifsQuery = 'SELECT * from gifs WHERE user_id = $1';
     try {
-        const { rows, rowCount } = await db.query(allGifsQuery);
+        const { rows, rowCount } = await db.query(allGifsQuery, [userId]);
         if (rowCount > 0) {
             // got feed                      
             return res.status(200).json({
-                result : rows
+                result : rows, 
+                status: 200
             })
 
         } else {
             // feed not found
             return res.status(404).json({
-                message : 'No Gif found'
+                message : 'No Gif found', 
+                status: 400
             })
         }
     } catch (error) {
