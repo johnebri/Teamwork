@@ -294,7 +294,7 @@ module.exports = {
     // get user id
     const userId = req.userData.userId;
 
-    const allArticlesQuery = 'SELECT * from articles WHERE user_id = $1';
+    const allArticlesQuery = 'SELECT * from articles WHERE user_id = $1 ORDER BY created_on DESC';
     try {
         const { rows, rowCount } = await db.query(allArticlesQuery, [userId]);
         if (rowCount > 0) {
