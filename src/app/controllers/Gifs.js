@@ -24,9 +24,9 @@ module.exports = {
   async create_gif(req, res) {
   
     const { title } = req.body;
-   
+    
     const image = await Helper.uploadToCloudinary(req.file.path); 
-
+   
     const createGifQuery = `INSERT INTO gifs(user_id, title, image_url, created_on, type)
       VALUES($1, $2, $3, $4, $5)
       returning *`;
