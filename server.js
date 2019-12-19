@@ -5,6 +5,8 @@ const checkAuth = require('./middleware/check-auth');
 
 const multer = require('multer');
 
+const fileUpload = require('express-fileupload');
+
 const Users = require('./src/app/controllers/Users');
 const Articles = require('./src/app/controllers/Articles');
 const Gifs = require('./src/app/controllers/Gifs');
@@ -15,10 +17,10 @@ dotenv.config();
 const app = express();
 app.use(express.json())
 
-
-
-
-
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/',
+}));
 
 app.get('/', (req, res) => {
     res.redirect('https://documenter.getpostman.com/view/9082520/SW7gTQ9n');
@@ -85,7 +87,8 @@ app.post('/api/v1/articles/:id/comment', checkAuth, Articles.comment_on_article)
 app.get('/api/v1/articles/:id', checkAuth, Articles.get_article);
 app.get('/api/v1/articles', checkAuth, Articles.get_all_articles);
 
-app.post('/api/v1/gifs', checkAuth, upload.single('GifImage'), Gifs.create_gif);
+ // app.post('/api/v1/gifs', checkAuth, upload.single('GifImage'), Gifs.create_gif);
+app.post('/api/v1/gifs', checkAuth, Gifs.create_gif);
 app.delete('/api/v1/gifs/:id', checkAuth, Gifs.delete_gif);
 app.post('/api/v1/gifs/:id/comment', checkAuth, Gifs.comment_on_gif);
 app.get('/api/v1/gifs/:id', checkAuth, Gifs.get_gif);

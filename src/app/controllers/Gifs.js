@@ -25,7 +25,9 @@ module.exports = {
   
     const { title } = req.body;
     
-    const image = await Helper.uploadToCloudinary(req.file.path); 
+    // console.log(req.files.GifImage.name);
+    // return;
+    const image = await Helper.uploadToCloudinary(req.files.GifImage); 
    
     const createGifQuery = `INSERT INTO gifs(user_id, title, image_url, created_on, type)
       VALUES($1, $2, $3, $4, $5)
