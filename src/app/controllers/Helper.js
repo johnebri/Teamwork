@@ -66,7 +66,7 @@ const Helper = {
 
   uploadToCloudinary(image) {
     return new Promise((resolve, reject) => {
-      cloudinary.uploader.upload(image.tempFilePath, { folder: 'TeamworkDemo' }, (err, url) => {
+      cloudinary.uploader.upload(image.tempFilePath, { folder: 'Teamwork' }, (err, url) => {
         if (err) return reject(err);
         return resolve(url);
       });
