@@ -16,12 +16,7 @@ const app = express();
 app.use(express.json())
 
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept,Authorization');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-    next();
-});
+
 
 
 
@@ -58,6 +53,13 @@ const upload = multer({
         fileSize: 1024 * 1024 * 10 // file limit of 10MB
     },
     fileFilter: fileFilter
+});
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept,Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    next();
 });
 
 app.post('/api/v1/auth/create-user', checkAuth, Users.create);
